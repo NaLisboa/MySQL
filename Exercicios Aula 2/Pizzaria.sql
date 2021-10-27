@@ -26,26 +26,57 @@ create database db_pizzaria_legal;
 
 use db_pizzaria_legal;
 
-create table tb_categoria (
-		id_categoria bigint auto_increment,
-		tipo enum ("Salgada", "Doce"),
-        tamanho enum ("Pequena", "Média", "Grande", "Tamanho Família"),
-        
-        primary key (id_categoria)
-	);
     
 create table tb_pizza(
 		id_pizza bigint auto_increment,
 		sabor varchar (255) not null,
+        valor decimal (5,2) not null,
         adicional varchar (255) not null, 
         borda varchar (255) not null,
-        
-        id_categoria bigint,
+        fk_id_categoria bigint(2),
         
         primary key (id_pizza),
-        foreign key (id_categoria) references tb_categoria
+        foreign key (fk_id_categoria) references tb_categoria(id_categoria)
 );
+
+
+
+create table tb_categoria (
+		id_categoria bigint auto_increment,
+		tipo varchar (255) not null,
+        tamanho varchar (255) not null,
         
-        
-        
-            
+        primary key (id_categoria)
+	);
+    select * from tb_categoria;
+    
+    insert into tb_categoria(tipo, tamanho)
+			values ("Salgada", "Média"),
+					("Doce", "Tamanho Família"),
+					 ("Salgada", "Pequena"),
+						("Doce", "Pequena"),
+                        ("Salgada", "Grande");
+                        
+	select * from tb_pizza;
+    
+	insert into tb_pizza(sabor, adicional, borda, fk_id_categoria, valor)
+		values ("Frango com Catupiry", "Batata palha", "Cheddar", 4, 47.00),
+				("Meia Brigadeiro, Meia Prestígio", "Morango", "Chocolate", 3, 45.00),
+				("Calabresa", "Sem adicional", "Sem Borda", 1, 25.00),
+				("4 Queijos", "Sem adicional", "Catupiry", 5, 40.00),
+				("Portuguesa", "Sem adicional", "Catupiry", 1, 32.00),
+				("Bauru", "Catupiry", "Cheddar", 5, 36.00),
+				("Chocolate com Banana", "Sem adicional", "Sem borda", 2, 30.00),
+				("Sorvete", "Sem adicional", "Chocolate", 4, 40.00);
+                
+	select * from tb_pizza;
+    select * from tb_categoria;
+    select * from tb_pizza where preco >= 45.00;
+    select * from tb_pizza where preco between 29.00 and 60.00;
+	select * from tb_pizza where sabor like "%C%";
+    select * from tb_pizza inner join tb_categoria
+    on tb_categoria.id_categoria = tb_pizza.fk_id_categoria;
+    
+    select * from tb_pizza inner join tb_categoria
+    on tb_categoria.id_categoria = tb_pizza.fk_id_categoria
+    where tb_categoria.tamanho = "Pequena";
